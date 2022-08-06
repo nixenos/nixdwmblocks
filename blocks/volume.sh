@@ -9,8 +9,8 @@ pactl list sinks | awk -v sink="$sink" '
     BEGIN {
         ICONsn = " " # headphone unplugged, not muted
         ICONsm = "[8] ﱝ [1]" # headphone unplugged, muted
-        ICONhn = " " # headphone plugged in, not muted
-        ICONhm = " " # headphone plugged in, muted
+        ICONhn = " " # headphone plugged in, not muted
+        ICONhm = "[8] ﳌ [1]" # headphone plugged in, muted
     }
     f {
         if ($1 == "Mute:" && $2 == "yes") {
@@ -35,10 +35,11 @@ pactl list sinks | awk -v sink="$sink" '
     END {
         if (f) {
             printf "%s", h ? (m ? ICONhm : ICONhn) : (m ? ICONsm : ICONsn)
-            if (vb)
+            if (vb && m!=1)
                 print vb
             else
-                printf "L%s R%s\n", vl, vr
+	    	if (m!=1)
+                	printf "L%s R%s\n", vl, vr
         }
     }
 '
